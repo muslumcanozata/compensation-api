@@ -1,0 +1,45 @@
+spring:
+  application:
+    name: Compensations API
+  jpa:
+    database: POSTGRESQL
+    show-sql: true
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:postgresql://localhost:5432/compensation
+    username: myuser
+    password: secret
+    driverClassName: org.postgresql.Driver
+  sql:
+    init:
+      platform: postgres
+  rabbitmq:
+    consumer:
+      compensation-created:
+        created:
+          topic: compensation-api.compensations.created
+      compensation-create-failed:
+        created:
+          topic: compensation-api.compensations-create-failed.created
+    producer:
+      compensation-created:
+        created:
+          topic: compensation-api.compensations.created
+      compensation-create-failed:
+        created:
+          topic: compensation-api.compensations-create-failed.created
+    config:
+      bootstrap-servers: kafka:9092
+      consumer:
+        group-id: compensation-api
+        auto-offset-reset: earliest
+        enable-auto-commit: false
+        trusted-packages: '*'
+      producer:
+        acks: "1"
+
+  server:
+    servlet:
+      context-path: /compensation-api
+    port: 8081

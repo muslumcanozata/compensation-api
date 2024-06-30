@@ -8,13 +8,13 @@ import java.time.LocalDateTime;
 public record CompensationDTO(
     Long id,
     LocalDateTime timestamp,
-    Integer age,
+    String age,
     String industry,
     String jobTitle,
     BigDecimal annualSalary,
     String currency,
     String location,
-    Integer yearsExperience,
+    String yearsExperience,
     String jobTitleContext,
     String otherCurrency) {
 

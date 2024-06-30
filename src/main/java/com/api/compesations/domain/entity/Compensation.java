@@ -17,7 +17,7 @@ public class Compensation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private LocalDateTime timestamp;
-    private int age;
+    private String age;
     private String industry;
     private String jobTitle;
     private BigDecimal annualSalary;

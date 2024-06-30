@@ -7,15 +7,14 @@ import com.api.compesations.messaging.publisher.CompensationCreatedPublisher;
 import com.api.compesations.repository.CompensationRepository;
 import com.api.compesations.util.CsvUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -45,10 +44,11 @@ public class CompensationServiceImpl implements CompensationService{
     }
 
     @Override
-    public List<CompensationDTO> getCompensationsSorted(String sortBy, String order) {
+    public List<CompensationDTO> getCompensationsSorted(String sortBy, String order, Integer pageNo, Integer pageSize) {
         Sort sort = Sort.by(Sort.Direction.fromString(order), sortBy);
-        List<Compensation> compensations = compensationRepository.findAll(sort);
-        return compensations.stream().map(CompensationDTO::fromEntity).toList();
+        PageRequest request = PageRequest.of(pageNo, pageSize, sort);
+        List<Compensation> compensations = compensationRepository.findAll(request).getContent();
+        return compensations.parallelStream().map(CompensationDTO::fromEntity).toList();
     }
 
 
@@ -57,12 +57,18 @@ public class CompensationServiceImpl implements CompensationService{
         if (CsvUtil.hasCsvFormat(file)) {
             try {
                 List<Compensation> compensations = CsvUtil.csvToCompensationList(file.getInputStream());
-                compensations.forEach(compensationCreatedPublisher::publishCompensationCreatedEvent);
+                compensations.stream().parallel().forEach(compensationCreatedPublisher::publishCompensationCreatedEvent);
                 return compensations.stream().map(CompensationDTO::fromEntity).toList();
             } catch (IOException e) {
                 throw new RuntimeException("fail to store csv data: " + e.getMessage());
             }
         }
         throw new RuntimeException("Please upload a csv file!");
+    }
+
+    @Override
+    public Long createCompensation(Compensation compensation) {
+        Compensation savedCompensation = compensationRepository.save(compensation);
+        return savedCompensation.getId();
     }
 }

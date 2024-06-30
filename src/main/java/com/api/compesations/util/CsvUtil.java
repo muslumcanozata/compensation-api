@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +22,12 @@ public class CsvUtil {
     }
 
     public static List<Compensation> csvToCompensationList(InputStream is) {
-        try (BufferedReader bReader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+        try (BufferedReader bReader = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8));
              CSVParser csvParser = new CSVParser(bReader,
                      CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim())) {
             List<Compensation> compensations = new ArrayList<>();
             Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-            for (CSVRecord csvRecord : csvRecords) {
-                Compensation compensation = toCompensation(csvRecord);
-                compensations.add(compensation);
-            }
+            csvRecords.forEach(csvRecord -> compensations.add(toCompensation(csvRecord)));
             return compensations;
         } catch (IOException e) {
             throw new RuntimeException("CSV data is failed to parse: " + e.getMessage());
@@ -38,12 +36,12 @@ public class CsvUtil {
 
     private static Compensation toCompensation(CSVRecord csvRecord) {
         Compensation compensation = new Compensation();
-        compensation.setAge(Integer.parseInt(csvRecord.get(HeaderNames.AGE)));
+        compensation.setAge(csvRecord.get(HeaderNames.AGE));
         compensation.setCurrency(csvRecord.get(HeaderNames.CURRENCY));
         compensation.setAnnualSalary(new BigDecimal(csvRecord.get(HeaderNames.ANNUAL_SALARY)));
         compensation.setIndustry(csvRecord.get(HeaderNames.INDUSTRY));
         compensation.setJobTitle(csvRecord.get(HeaderNames.JOB_TITLE));
-        compensation.setYearsExperience(Integer.parseInt(csvRecord.get(HeaderNames.EXPERIENCE)));
+        compensation.setYearsExperience(csvRecord.get(HeaderNames.EXPERIENCE));
         compensation.setJobTitleContext(csvRecord.get(HeaderNames.JOB_TITLE_CONTEXT));
         compensation.setLocation(csvRecord.get(HeaderNames.LOCATION));
         compensation.setOtherCurrency(csvRecord.get(HeaderNames.OTHER_CURRENCY));

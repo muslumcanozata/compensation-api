@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @Entity
@@ -13,19 +16,14 @@ public class Compensation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String timestamp;
+    private LocalDateTime timestamp;
+    private int age;
+    private String industry;
+    private String jobTitle;
+    private BigDecimal annualSalary;
+    private String currency;
     private String location;
-    private String gender;
-    private String race;
-    private String employer;
-    private String title;
-    private Integer yearsOfExperience;
-    private Integer yearsAtEmployer;
-    private Double baseSalary;
-    private Double bonus;
-    private Double stockOptions;
-    private String signOnBonus;
-    private String annualBonus;
-    private String annualStockValue;
-    private String yearOfData;
+    private int yearsExperience;
+    private String jobTitleContext;
+    private String otherCurrency;
 }

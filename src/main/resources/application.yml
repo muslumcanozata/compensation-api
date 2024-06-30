@@ -32,7 +32,7 @@ rabbitmq:
       exchange: compensations_create_failed_exchange
       routingKey: compensations_create_failed_routingKey
 
-  server:
-    port: 8080
-    servlet:
-      context-path: /api/v1
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1

@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Getter
@@ -20,7 +19,7 @@ public class Compensation {
     private String age;
     private String industry;
     private String jobTitle;
-    private BigDecimal annualSalary;
+    private String annualSalary;
     private String currency;
     private String location;
     private String yearsExperience;

@@ -8,9 +8,7 @@ import org.apache.commons.csv.CSVRecord;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
-import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,14 +36,14 @@ public class CsvUtil {
         Compensation compensation = new Compensation();
         compensation.setAge(csvRecord.get(HeaderNames.AGE));
         compensation.setCurrency(csvRecord.get(HeaderNames.CURRENCY));
-        compensation.setAnnualSalary(new BigDecimal(csvRecord.get(HeaderNames.ANNUAL_SALARY)));
+        compensation.setAnnualSalary(csvRecord.get(HeaderNames.ANNUAL_SALARY));
         compensation.setIndustry(csvRecord.get(HeaderNames.INDUSTRY));
         compensation.setJobTitle(csvRecord.get(HeaderNames.JOB_TITLE));
         compensation.setYearsExperience(csvRecord.get(HeaderNames.EXPERIENCE));
         compensation.setJobTitleContext(csvRecord.get(HeaderNames.JOB_TITLE_CONTEXT));
         compensation.setLocation(csvRecord.get(HeaderNames.LOCATION));
         compensation.setOtherCurrency(csvRecord.get(HeaderNames.OTHER_CURRENCY));
-        compensation.setTimestamp(LocalDateTime.parse(csvRecord.get(HeaderNames.TIMESTAMP)));
+        compensation.setTimestamp(CommonUtil.parseTimestamp(csvRecord.get(HeaderNames.TIMESTAMP)));
         return compensation;
     }
 }

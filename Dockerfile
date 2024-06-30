@@ -5,7 +5,7 @@ RUN gradle build --no-daemon
 
 FROM amazoncorretto:17-alpine-jdk
 RUN mkdir /app
-COPY --from=build /home/gradle/src/build/libs/*.jar /app/product-service.jar
+COPY --from=build /home/gradle/src/build/libs/*.jar /app/compensation-api.jar
 WORKDIR /app
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=test", "product-service.jar"]
+ENTRYPOINT ["java", "-jar", "-Dspring.profiles.active=test", "compensation-api.jar"]

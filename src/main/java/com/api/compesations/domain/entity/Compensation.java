@@ -23,7 +23,7 @@ public class Compensation {
     private BigDecimal annualSalary;
     private String currency;
     private String location;
-    private int yearsExperience;
+    private String yearsExperience;
     private String jobTitleContext;
     private String otherCurrency;
 }
